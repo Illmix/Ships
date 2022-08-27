@@ -19,12 +19,12 @@ class BoardException(Exception):
 
 class BoardOutException(BoardException):
 	def __str__(self):
-		return "Вы пытаетесь выстрелить за доску!"
+		return "Error! You went off the board."
 
 
 class BoardUsedException(BoardException):
 	def __str__(self):
-		return "Вы уже стреляли в эту клетку"
+		return "You already shot here"
 
 
 class BoardWrongShipException(BoardException):
@@ -127,11 +127,11 @@ class Board:
 					self.contour(ship, verb=True)
 					print('Ship destroyed')
 				else:
-					print('Попал!')
+					print('Hit!')
 					return True
 
 		self.field[d.x][d.y] = "."
-		print('Мимо!')
+		print('Missed!')
 		return False
 
 	def begin(self):
@@ -159,23 +159,23 @@ class Player:
 class AI(Player):
 	def ask(self):
 		d = Dot(random.randint(0, 5), random.randint(0, 5))
-		print(f"Ход компьютера: {d.x + 1} {d.y + 1}")
+		print(f"Сomputer queue: {d.x + 1} {d.y + 1}")
 		return d
 
 
 class User(Player):
 	def ask(self):
 		while True:
-			cords = input("Ваш ход: ").split()
+			cords = input("Your queue: ").split()
 
 			if len(cords) != 2:
-				print(" Введите 2 координаты! ")
+				print(" Enter 2 coordinates! ")
 				continue
 
 			x, y = cords
 
 			if not (x.isdigit()) or not (y.isdigit()):
-				print(" Введите числа! ")
+				print(" Enter numbers! ")
 				continue
 
 			x, y = int(x), int(y)
@@ -220,42 +220,41 @@ class Game:
 
 	def greet(self):
 		print("-------------------")
-		print("  Приветсвуем вас  ")
-		print("      в игре       ")
-		print("    морской бой    ")
+		print("   Welcome to the  ")
+		print("     sea battle    ")
 		print("-------------------")
-		print(" формат ввода: x y ")
-		print(" x - номер строки  ")
-		print(" y - номер столбца ")
+		print(" Enter format: x y ")
+		print("  x - row number   ")
+		print(" y - column number ")
 
 	def loop(self):
 		num = 0
 		while True:
 			print("-" * 20)
-			print("Доска пользователя:")
+			print("User board:")
 			print(self.us.board)
 			print("-" * 20)
-			print("Доска компьютера:")
+			print("Computer board:")
 			print(self.ai.board)
 			if num % 2 == 0:
 				print("-" * 20)
-				print("Ходит пользователь!")
+				print("User queue!")
 				repeat = self.us.move()
 			else:
 				print("-" * 20)
-				print("Ходит компьютер!")
+				print("Computer queue!")
 				repeat = self.ai.move()
 			if repeat:
 				num -= 1
 
 			if self.ai.board.count == 7:
 				print("-" * 20)
-				print("Пользователь выиграл!")
+				print("User has won!")
 				break
 
 			if self.us.board.count == 7:
 				print("-" * 20)
-				print("Компьютер выиграл!")
+				print("Computer has won!")
 				break
 			num += 1
 
